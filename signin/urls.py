@@ -7,5 +7,5 @@ router.register('viewset',views.UserRegistrationView)
 
 
 urlpatterns = [
-    path("viewsets/", include(router.urls)),
+    path("tourrist/", include(router.urls)),
 ]

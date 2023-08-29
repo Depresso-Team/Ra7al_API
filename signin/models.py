@@ -97,6 +97,22 @@ class User(models.Model):
 
 
 
+class Guide(models.Model):
+    name = models.CharField(max_length=100)
+    phone_number = models.PositiveIntegerField(unique=True)
+    email_address = models.EmailField(unique=True)
+    address = models.CharField(max_length=200)
+    country_code = models.PositiveIntegerField()
+    languages = models.CharField(max_length=50, choices=LANGUAGES)
+    photo_url = models.URLField()
+    session_message = models.CharField(max_length=200, blank=True, null=True)
+    rate = models.FloatField(default=0.0)
+    reviews = models.TextField(max_length=255)    
+
+
+
+
+
 @receiver(post_save, sender=User)
 def user_created(sender, instance, created, **kwargs):
     if created:
