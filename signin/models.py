@@ -105,11 +105,12 @@ class Guide(models.Model):
     country_code = models.PositiveIntegerField()
     languages = models.CharField(max_length=50, choices=LANGUAGES)
     photo_url = models.URLField()
-    session_message = models.CharField(max_length=200, blank=True, null=True)
     rate = models.FloatField(default=0.0)
     reviews = models.TextField(max_length=255)    
+    session_message = models.CharField(max_length=200, blank=True, null=True)
 
-
+    def __str__(self):
+        return self.name
 
 
 
@@ -117,5 +118,14 @@ class Guide(models.Model):
 def user_created(sender, instance, created, **kwargs):
     if created:
         message = f"New user '{instance.name}' has been created! Welcome aboard!"
+        instance.session_message = message
+        instance.save()
+
+
+
+@receiver(post_save, sender=Guide)
+def guide_created(sender, instance, created, **kwargs):
+    if created:
+        message = f"New guide '{instance.name}' has been created! Welcome aboard!"
         instance.session_message = message
         instance.save()
