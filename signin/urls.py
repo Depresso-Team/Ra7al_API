@@ -1,13 +1,16 @@
-from django.urls import path , include
-from. import views
+# Import necessary modules from Django and Django REST framework
+from django.urls import path, include
+from . import views
 from rest_framework.routers import DefaultRouter
 
-router =DefaultRouter()
-router.register('users',views.UserRegistrationView)
-router.register('guides',views.GuideRegistrationView)
+# Create a DefaultRouter instance for automatic URL routing
+router = DefaultRouter()
+router.register('users', views.UserRegistrationView)
+router.register('guides', views.GuideRegistrationView)
 
-
+# Define URL patterns for the application
 urlpatterns = [
-    path("tourrist/", include(router.urls)),
+    # Include automatically generated URLs for 'users' and 'guides' resources under different endpoints
+    path("tourist/", include(router.urls)),
     path("guides/", include(router.urls)),
 ]

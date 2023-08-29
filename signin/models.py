@@ -1,8 +1,10 @@
+# Import necessary modules from Django
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.sessions.models import Session
 
+# List of languages
 LANGUAGES = [
     ("en", "English"),
     ("es", "Spanish"),
@@ -81,7 +83,9 @@ LANGUAGES = [
     ("yi", "Yiddish"),
 ]
 
+# Model for User
 class User(models.Model):
+    # Fields for User model
     name = models.CharField(max_length=100)
     phone_number = models.PositiveIntegerField(unique=True)
     email_address = models.EmailField(unique=True)
@@ -91,13 +95,12 @@ class User(models.Model):
     photo_url = models.URLField()
     session_message = models.CharField(max_length=200, blank=True, null=True)
 
-
     def __str__(self):
         return self.name
 
-
-
+# Model for Guide
 class Guide(models.Model):
+    # Fields for Guide model
     name = models.CharField(max_length=100)
     phone_number = models.PositiveIntegerField(unique=True)
     email_address = models.EmailField(unique=True)
@@ -106,14 +109,13 @@ class Guide(models.Model):
     languages = models.CharField(max_length=50, choices=LANGUAGES)
     photo_url = models.URLField()
     rate = models.FloatField(default=0.0)
-    reviews = models.TextField(max_length=255)    
+    reviews = models.TextField(max_length=255)
     session_message = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
-
-
+# Signal for handling user creation
 @receiver(post_save, sender=User)
 def user_created(sender, instance, created, **kwargs):
     if created:
@@ -121,8 +123,7 @@ def user_created(sender, instance, created, **kwargs):
         instance.session_message = message
         instance.save()
 
-
-
+# Signal for handling guide creation
 @receiver(post_save, sender=Guide)
 def guide_created(sender, instance, created, **kwargs):
     if created:
