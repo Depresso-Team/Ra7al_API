@@ -13,3 +13,8 @@ class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = '__all__'  # Serialize all fields of the Guide model
+
+
+class UserLoginSerializer(serializers.Serializer):
+    email_address = serializers.EmailField()
+    phone_number = serializers.CharField()

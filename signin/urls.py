@@ -13,4 +13,5 @@ urlpatterns = [
     # Include automatically generated URLs for 'users' and 'guides' resources under different endpoints
     path("tourist/", include(router.urls)),
     path("guides/", include(router.urls)),
+    path('login/', views.UserLoginView.as_view(), name='user-login'),
 ]
