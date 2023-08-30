@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from .models import User
+from django.contrib.auth.hashers import check_password
 
 # Import models and serializers from application
 from .models import User, Guide
@@ -50,22 +50,26 @@ class GuideRegistrationView(viewsets.ModelViewSet):
     serializer_class = GuideSerializer
 
 
+
 class UserLoginView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email_address']
-            phone_number = serializer.validated_data['phone_number']
-
+            password = serializer.validated_data['password']
+            
             try:
-                user = User.objects.get(email_address=email, phone_number=phone_number)
-                user_serializer = UserSerializer(user)
-                return Response(user_serializer.data, status=status.HTTP_200_OK)
+                user = User.objects.get(email_address=email)
             except User.DoesNotExist:
-                return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            if check_password(password, user.password):
+                # Return user data in the response
+                user_serializer = UserSerializer(user)  # Replace with your user serializer
+                return Response({'detail': 'Login successful', 'user': user_serializer.data})
+            else:
+                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -74,13 +78,17 @@ class GuideLoginView(APIView):
         serializer = GuideLoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email_address']
-            phone_number = serializer.validated_data['phone_number']
-
+            password = serializer.validated_data['password']
+            
             try:
-                guide = Guide.objects.get(email_address=email, phone_number=phone_number)
-                guide_serializer = GuideSerializer(guide)
-                return Response(guide_serializer.data, status=status.HTTP_200_OK)
+                guide = Guide.objects.get(email_address=email)
             except Guide.DoesNotExist:
-                return Response({"message": "Guide not found"}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            if check_password(password, guide.password):
+                # Return guide data in the response
+                guide_serializer = GuideSerializer(guide)  # Replace with your guide serializer
+                return Response({'detail': 'Login successful', 'guide': guide_serializer.data})
+            else:
+                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.sessions.models import Session
+from django.contrib.auth.hashers import make_password  # Import the password hashing function
 
 # List of languages
 LANGUAGES = [
@@ -89,14 +90,23 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.PositiveIntegerField(unique=True)
     email_address = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Encrypted password field
     address = models.CharField(max_length=200)
     country_code = models.PositiveIntegerField()
     languages = models.CharField(max_length=50, choices=LANGUAGES)
     photo_url = models.URLField()
     session_message = models.CharField(max_length=200, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        # Encrypt the password before saving
+        if self.password and not self.password.startswith('pbkdf2_sha256$'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
         return self.name
+
 
 # Model for Guide
 class Guide(models.Model):
@@ -104,6 +114,7 @@ class Guide(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.PositiveIntegerField(unique=True)
     email_address = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Encrypted password field
     address = models.CharField(max_length=200)
     country_code = models.PositiveIntegerField()
     languages = models.CharField(max_length=50, choices=LANGUAGES)
@@ -112,8 +123,16 @@ class Guide(models.Model):
     reviews = models.TextField(max_length=255)
     session_message = models.CharField(max_length=200, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        # Encrypt the password before saving
+        if self.password and not self.password.startswith('pbkdf2_sha256$'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
+    
+
 
 # Signal for handling user creation
 @receiver(post_save, sender=User)
