@@ -18,3 +18,8 @@ class GuideSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     email_address = serializers.EmailField()
     phone_number = serializers.CharField()
+
+
+class GuideLoginSerializer(serializers.Serializer):
+    email_address = serializers.EmailField()
+    phone_number = serializers.CharField() 

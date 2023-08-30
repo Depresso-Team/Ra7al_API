@@ -7,7 +7,7 @@ from .models import User
 
 # Import models and serializers from application
 from .models import User, Guide
-from .serializers import UserSerializer, GuideSerializer , UserLoginSerializer
+from .serializers import UserSerializer, GuideSerializer , UserLoginSerializer , GuideLoginSerializer
 
 
 
@@ -63,5 +63,24 @@ class UserLoginView(APIView):
                 return Response(user_serializer.data, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class GuideLoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = GuideLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email_address']
+            phone_number = serializer.validated_data['phone_number']
+
+            try:
+                guide = Guide.objects.get(email_address=email, phone_number=phone_number)
+                guide_serializer = GuideSerializer(guide)
+                return Response(guide_serializer.data, status=status.HTTP_200_OK)
+            except Guide.DoesNotExist:
+                return Response({"message": "Guide not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
