@@ -72,6 +72,9 @@ def user_login(request):
 
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            serializer = UserSerializer(user)  # Pass the user instance to the serializer
+            serialized_data = serializer.data
+            serialized_data['token'] = token.key  # Add the token data to the serialized user data
+            return Response(serialized_data, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
