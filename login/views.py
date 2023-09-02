@@ -22,7 +22,8 @@ def register_user(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
+
+# Register a new user by CBV (generics)    
 class RegisterUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
 

@@ -123,7 +123,7 @@ class Guide(models.Model):
     def __str__(self):
         return self.user.username
     
-
+# Signal to create a Guide object when a CustomUser with is_guide=True is created
 @receiver(post_save, sender=CustomUser)
 def create_guide(sender, instance, created, **kwargs):
     if created and instance.is_guide:
