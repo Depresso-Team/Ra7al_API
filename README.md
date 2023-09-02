@@ -11,7 +11,7 @@
 
 Welcome to the Ra7al REST API project! This project is being developed by Ahmed Magdy and Zeyad Slama. Ra7al is a modern, user-friendly REST API designed to provide various travel-related services and information.
 
-## Team Members
+## TeamMates
 
 - **Ahmed Magdy**
   - GitHub: [Ahmed Magdy](https://github.com/AhmedDR200)
