@@ -1,11 +1,5 @@
 # Ra7al REST API Project
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Team Members](#team-members)
-- [Project Description](#project-description)
-
----
 
 ## Introduction
 
