@@ -14,12 +14,12 @@ Welcome to the Ra7al REST API project! This project is being developed by Ahmed 
 ## Team Members
 
 - **Ahmed Magdy**
-  - GitHub: [AhmedMagdy17]([https://github.com/AhmedMagdy17](https://github.com/AhmedDR200))
-  - LinkedIn: [Ahmed Magdy]([https://www.linkedin.com/in/ahmed-magdy](https://www.linkedin.com/in/%D9%90%D9%90ahmedmagdy41/))
+  - GitHub: [Ahmed Magdy](https://github.com/AhmedDR200)
+  - LinkedIn: [Ahmed Magdy](https://www.linkedin.com/in/%D9%90%D9%90ahmedmagdy41/)
 
 - **Zeyad Slama**
-  - GitHub: [ZeyadSlama]([https://github.com/ZeyadSlama](https://github.com/Demo-23home))
-  - LinkedIn: [Zeyad Slama]([https://www.linkedin.com/in/zeyadslama](https://www.linkedin.com/in/demo-23home/))
+  - GitHub: [ZeyadSlama](https://github.com/Demo-23home)
+  - LinkedIn: [Zeyad Slama](https://www.linkedin.com/in/demo-23home/)
 
 ## Project Description
 
