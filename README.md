@@ -1,5 +1,3 @@
-# Ra7al API
-
 # Ra7al REST API Project
 
 ## Table of Contents
