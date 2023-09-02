@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path , include
 from .views import register_user, user_login, user_logout , get_all_users , user_detail , RegisterUserView
+from . import views
 
 
 

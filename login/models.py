@@ -95,14 +95,13 @@ class CustomUser(AbstractUser):
     photo_url = models.URLField(max_length=255)
     languages = languages = models.CharField(max_length=50, choices=LANGUAGES)
     session_message = models.CharField(max_length=200, blank=True, null=True)
+    is_guide = models.BooleanField(default=False)
 
 
 
     def __str__(self):
         return self.username
     
-
-
 
 # Signal for handling user creation
 @receiver(post_save, sender=CustomUser)
@@ -112,3 +111,20 @@ def user_created(sender, instance, created, **kwargs):
         instance.session_message = message
         instance.save()
     
+
+class Guide(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    rate = models.FloatField(default=0.0)
+    reviews = models.TextField(max_length=255)
+    photos = models.ImageField(upload_to=None)
+    is_approved = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return self.user.username
+    
+
+@receiver(post_save, sender=CustomUser)
+def create_guide(sender, instance, created, **kwargs):
+    if created and instance.is_guide:
+        Guide.objects.create(user=instance)

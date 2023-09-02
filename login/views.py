@@ -104,3 +104,4 @@ def user_detail(request, user_id):
     if request.method == 'DELETE':
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
