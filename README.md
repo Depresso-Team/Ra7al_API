@@ -1,8 +1,8 @@
-# Ra7al REST API Project
+# RAHAL REST API Project
 
 ## Introduction
 
-Welcome to the Ra7al REST API project! This project is being developed by Ahmed Magdy and Zeyad Slama. Ra7al is a modern, user-friendly REST API designed to provide various travel-related services and information.
+Welcome to the RAHAL REST API project! This project is being developed by Ahmed Magdy and Zeyad Slama. RAHAL is a modern, user-friendly REST API designed to provide various travel-related services and information.
 
 ## TeamMates
 
@@ -16,4 +16,4 @@ Welcome to the Ra7al REST API project! This project is being developed by Ahmed 
 
 ## Project Description
 
-The Ra7al REST API project aims to simplify and enhance the travel experience for users by providing a wide range of travel-related services and information. The project includes features such as user registration, booking flights and accommodations, accessing travel guides, and much more. 
+The RAHAL REST API project aims to simplify and enhance the travel experience for users by providing a wide range of travel-related services and information. The project includes features such as user registration, booking flights and accommodations, accessing travel guides, and much more. 
