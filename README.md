@@ -1,3 +1,10 @@
+[![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.youtube.com/channel/UCKspdO30Fea8ZCxwg-0svOg)
+[![Django](https://img.shields.io/badge/djangorest-ff1709?style=for-the-badge&logo=django&logoColor=white)](https://code.visualstudio.com/download)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+[![VS Code](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)](https://code.visualstudio.com/download)
+
+This API is based on python 100% and it is created by django rest framework.
+
 # RAHAL REST API Project
 
 ## Introduction
