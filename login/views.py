@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
-from .models import CustomUser
+from .models import CustomUser , Guide
 
 
 
@@ -43,7 +43,7 @@ def user_logout(request):
         
 
 
-# Log in a user
+# Login a user or guide
 @api_view(['POST'])
 def user_login(request):
     if request.method == 'POST':
@@ -65,9 +65,19 @@ def user_login(request):
             serializer = UserSerializer(user)  # Pass the user instance to the serializer
             serialized_data = serializer.data
             serialized_data['token'] = token.key  # Add the token data to the serialized user data
+
+            # Check if the user is a guide and include guide-specific data
+            if user.is_guide:
+                guide = Guide.objects.get(user=user)
+                serialized_data['rate'] = guide.rate
+                serialized_data['reviews'] = guide.reviews
+                serialized_data['photos'] = guide.photos
+                serialized_data['is_approved'] = guide.is_approved
+
             return Response(serialized_data, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
     
 
 

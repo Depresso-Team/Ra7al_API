@@ -116,7 +116,7 @@ class Guide(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     rate = models.FloatField(default=0.0)
     reviews = models.TextField(max_length=255)
-    photos = models.ImageField(upload_to=None)
+    photos = models.URLField(max_length=200)
     is_approved = models.BooleanField(default=False)
 
 
