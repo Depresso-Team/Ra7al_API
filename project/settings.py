@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login',
+    'tours',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -93,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME':'ra7al_db',
         'USER':'postgres',
-        'PASSWORD':'toor',
+        'PASSWORD':'4120',
         'HOST':'localhost',
         'PORT':5432,
     }
