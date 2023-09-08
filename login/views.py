@@ -71,7 +71,7 @@ def user_login(request):
                 guide = Guide.objects.get(user=user)
                 serialized_data['rate'] = guide.rate
                 serialized_data['reviews'] = guide.reviews
-                serialized_data['photos'] = guide.photos
+                serialized_data['personal_photo'] = guide.personal_photo
                 serialized_data['is_approved'] = guide.is_approved
 
             return Response(serialized_data, status=status.HTTP_200_OK)
