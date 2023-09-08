@@ -18,3 +18,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+from rest_framework import serializers
+from .models import Guide
+
+class GuideSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Guide
+        fields = ['id', 'username', 'personal_photo', 'background_URL']

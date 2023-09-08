@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import register_user, user_login, user_logout, get_all_users, user_detail, RegisterUserView
+from .views import *
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),  # Endpoint for user logout
     path('all_users', get_all_users, name='get_all_users'),  # Endpoint to get all users
     path('users/<int:user_id>/', user_detail, name='user-detail'),  # Endpoint for user detail view
+    path('guides/', GuideList.as_view(), name='guide-list'),
 ]

@@ -1,0 +1,419 @@
+swagger: '2.0'
+info:
+  title: RAHAL API
+  description: Test description
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: contact@snippets.local
+  license:
+    name: BSD License
+  version: v1
+host: 127.0.0.1:8000
+schemes:
+- http
+basePath: /
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+- Basic: []
+paths:
+  /tours/create/:
+    post:
+      operationId: tours_create_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ToursList'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ToursList'
+      tags:
+      - tours
+    parameters: []
+  /tours/list/:
+    get:
+      operationId: tours_list_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - tours
+    parameters: []
+  /tours/{id}/:
+    get:
+      operationId: tours_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ToursList'
+      tags:
+      - tours
+    put:
+      operationId: tours_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ToursList'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ToursList'
+      tags:
+      - tours
+    patch:
+      operationId: tours_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ToursList'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ToursList'
+      tags:
+      - tours
+    delete:
+      operationId: tours_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - tours
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this tours list.
+      required: true
+      type: integer
+  /users/all_users:
+    get:
+      operationId: users_all_users_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/guides/:
+    get:
+      operationId: users_guides_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/login/:
+    post:
+      operationId: users_login_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/logout/:
+    post:
+      operationId: users_logout_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/register/:
+    post:
+      operationId: users_register_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/register2/:
+    post:
+      operationId: users_register2_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+      - users
+    parameters: []
+  /users/users/{user_id}/:
+    get:
+      operationId: users_users_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - users
+    put:
+      operationId: users_users_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - users
+    delete:
+      operationId: users_users_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - users
+    parameters:
+    - name: user_id
+      in: path
+      required: true
+      type: string
+definitions:
+  ToursList:
+    required:
+    - name
+    - location
+    - company_name
+    - state_id
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 100
+        minLength: 1
+      location:
+        title: Location
+        type: string
+        maxLength: 100
+        minLength: 1
+      company_name:
+        title: Company name
+        type: string
+        maxLength: 100
+        minLength: 1
+      state_id:
+        title: State id
+        type: string
+        enum:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+        - '13'
+        - '14'
+        - '15'
+        - '16'
+        - '17'
+        - '18'
+        - '19'
+        - '20'
+        - '21'
+        - '22'
+        - '23'
+        - '24'
+        - '25'
+        - '26'
+        - '27'
+        - '28'
+        - '29'
+        - '30'
+        - '31'
+  User:
+    required:
+    - username
+    - email
+    - password
+    - address
+    - photo_url
+    - languages
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      phone:
+        title: Phone
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      address:
+        title: Address
+        type: string
+        maxLength: 150
+        minLength: 1
+      country_code:
+        title: Country code
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      photo_url:
+        title: Photo url
+        type: string
+        format: uri
+        maxLength: 255
+        minLength: 1
+      languages:
+        title: Languages
+        type: string
+        enum:
+        - en
+        - es
+        - fr
+        - de
+        - it
+        - pt
+        - nl
+        - ru
+        - ja
+        - zh-cn
+        - ar
+        - hi
+        - ko
+        - tr
+        - pl
+        - uk
+        - cs
+        - sv
+        - ro
+        - hu
+        - vi
+        - el
+        - th
+        - he
+        - id
+        - da
+        - fi
+        - 'no'
+        - bn
+        - ta
+        - hr
+        - fa
+        - sk
+        - sl
+        - ms
+        - et
+        - lt
+        - lv
+        - sr
+        - sw
+        - tl
+        - is
+        - ka
+        - hy
+        - ur
+        - uz
+        - kk
+        - az
+        - ky
+        - gu
+        - mr
+        - ne
+        - pa
+        - si
+        - te
+        - ml
+        - kn
+        - or
+        - as
+        - my
+        - dz
+        - km
+        - lo
+        - mn
+        - ps
+        - sd
+        - tg
+        - tk
+        - ug
+        - yi
+      is_guide:
+        title: Is guide
+        type: boolean
+      session_message:
+        title: Session message
+        type: string
+        maxLength: 200
+        x-nullable: true

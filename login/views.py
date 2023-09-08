@@ -116,3 +116,23 @@ def user_detail(request, user_id):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Guide
+from .serializers import GuideSerializer
+
+class GuideList(APIView):
+    def get(self, request, format=None):
+        guides = Guide.objects.all()
+        serializer = GuideSerializer(guides, many=True)
+
+        response_data = {
+            "status": True,
+            "message": "success",
+            "guides": serializer.data
+        }
+
+        return Response(response_data)
