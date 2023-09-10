@@ -4,11 +4,13 @@
 [![VS Code](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)](https://code.visualstudio.com/download)
 
 This API is based on python 100% and it is created by django rest framework.
+
 ![App Logo](https://sevenquality.com/wp-content/uploads/2023/09/playstore-e1694134482705.png)
 
 # RAHAL REST API Project
 
 ## Introduction
+
 
 Welcome to the RAHAL REST API project! This project is being developed by Ahmed Magdy and Zeyad Slama. RAHAL is a modern, user-friendly REST API designed to provide various travel-related services and information.
 ![Banner](https://sevenquality.com/wp-content/uploads/2023/09/Banner.png)
