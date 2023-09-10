@@ -27,7 +27,7 @@ ALLOWED_HOSTS = []
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rahal-app-efe3e7eff0b7.herokuapp.com']
+# ALLOWED_HOSTS = ['rahal-app-efe3e7eff0b7.herokuapp.com']
 
 
 # Application definition

@@ -2,8 +2,9 @@ from rest_framework.generics import CreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from .models import ToursList
-from .serializers import ToursListSerializer
+from .serializers import ToursListSerializer, HighestRateByStateSerializer
 from rest_framework.views import APIView
+from django.db.models import Max
 
 
 # Create a Tour
@@ -61,3 +62,43 @@ class ToursListView(APIView):
 class ToursListDetailView(RetrieveUpdateDestroyAPIView):
     queryset = ToursList.objects.all()
     serializer_class = ToursListSerializer
+
+
+
+
+# Best Tours , filtered by rate 
+class HighestRateByState(APIView):
+    def get(self, request):
+        # Get the state with the highest rate for each state
+        queryset = ToursList.objects.values('state_id').annotate(highest_rate=Max('rate')).order_by('-highest_rate')
+        
+        # Create a dictionary to store the highest rate, location, and name for each state
+        highest_rates_by_state = {}
+        
+        for item in queryset:
+            state_id = item['state_id']
+            highest_rate = item['highest_rate']
+            
+            # Get the location, name, and company name with the highest rate for the current state
+            highest_data = ToursList.objects.filter(state_id=state_id, rate=highest_rate).values('location', 'name', 'company_name').first()
+            
+            # Add the state_id, highest_rate, highest_location, name, and company_name to the dictionary
+            highest_rates_by_state[state_id] = {
+                'state_id': state_id,
+                'highest_rate': highest_rate,
+                'highest_location': highest_data['location'] if highest_data else None,
+                'name': highest_data['name'] if highest_data else None,
+                'company_name': highest_data['company_name'] if highest_data else None
+            }
+        
+        # Serialize the data using the HighestRateByStateSerializer
+        serializer = HighestRateByStateSerializer(highest_rates_by_state.values(), many=True)
+
+        response_data = {
+            "status": True,
+            "message": "success",
+            "guides": serializer.data
+        }
+
+        return Response(response_data)
+

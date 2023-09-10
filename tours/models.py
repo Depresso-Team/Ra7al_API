@@ -42,6 +42,7 @@ class ToursList(models.Model):
     location = models.CharField(max_length=100)
     status = models.BooleanField(default=True) 
     message = models.TextField(blank=True, null=True)
+    rate = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.name

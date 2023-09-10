@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', user_login, name='login'),  # Endpoint for user login
     path('logout/', user_logout, name='logout'),  # Endpoint for user logout
     path('all_users', get_all_users, name='get_all_users'),  # Endpoint to get all users
-    path('users/<int:user_id>/', user_detail, name='user-detail'),  # Endpoint for user detail view
-    path('guides/', GuideList.as_view(), name='guide-list'),
+    path('guides/', GuideList.as_view(), name='guide-list'), # All Guides
+    path('highest_rated_guide/', HighestRatedGuide.as_view(), name='highest_rated_guide'), # Best Guides
+    path('user/<int:pk>/', UserDetailView.as_view(), name='user_detail'), # Endpoint for user detail view
 ]

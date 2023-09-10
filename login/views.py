@@ -2,13 +2,15 @@ from django.shortcuts import render
 from rest_framework import status , generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer
+from .serializers import UserSerializer , HighestRatedGuideSerializer , GuideSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from .models import CustomUser , Guide
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 
@@ -31,15 +33,19 @@ class RegisterUserView(generics.CreateAPIView):
 
 # Logout a user
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def user_logout(request):
     if request.method == 'POST':
         try:
-            # Delete the user's token to logout
+            # Get the username of the logged-out user
+            username = request.user.username
+
+            # Delete the user's token to log out
             request.user.auth_token.delete()
-            return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+
+            return Response({'message': f'{username} logged out.'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 
 
@@ -92,38 +98,16 @@ def get_all_users(request):
     
 
 
-
-# Get, Update, or Delete a specific user
-@api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, user_id):
-    try:
-        user = CustomUser.objects.get(id=user_id)
-    except CustomUser.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    if request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    if request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+# Retrive , Update , Delete a user or guide
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Guide
-from .serializers import GuideSerializer
 
+
+# Guides List
 class GuideList(APIView):
     def get(self, request, format=None):
         guides = Guide.objects.all()
@@ -136,3 +120,30 @@ class GuideList(APIView):
         }
 
         return Response(response_data)
+
+
+
+# Best Guides , filtered by rate
+class HighestRatedGuide(APIView):
+    def get(self, request):
+        # Get all guides that are approved, ordered by rate in descending order
+        guides = Guide.objects.filter(is_approved=True).order_by('-rate')
+
+        # Serialize the guides using the HighestRatedGuideSerializer
+        serializer = HighestRatedGuideSerializer(guides, many=True)
+        
+        response_data = {
+            "status": True,
+            "message": "success",
+            "guides": serializer.data
+        }
+
+        return Response(response_data)
+
+
+
+
+
+
+
+

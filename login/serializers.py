@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser , Guide
 
+# User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -20,12 +21,24 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-from rest_framework import serializers
-from .models import Guide
 
+
+# Guides List
 class GuideSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Guide
         fields = ['id', 'username', 'personal_photo', 'background_URL']
+
+
+
+
+# Best Guides
+class HighestRatedGuideSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='user.id')
+    username = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Guide
+        fields = ['id', 'username', 'personal_photo', 'background_URL', 'rate']
