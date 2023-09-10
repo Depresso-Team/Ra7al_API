@@ -5,6 +5,10 @@ from .models import ToursList
 from .serializers import ToursListSerializer, HighestRateByStateSerializer
 from rest_framework.views import APIView
 from django.db.models import Max
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.generics import ListAPIView
+
+
 
 
 # Create a Tour
@@ -39,21 +43,19 @@ class ToursListCreateView(CreateAPIView):
         return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-
+# Pagination Class
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 500
 
 
 # List all Tours
-class ToursListView(APIView):
-    def get(self, request, format=None):
-        tours = ToursList.objects.all()
-        serializer = ToursListSerializer(tours, many=True)
+class ToursListView(ListAPIView):
+    queryset = ToursList.objects.all()
+    serializer_class = ToursListSerializer
+    pagination_class = CustomPageNumberPagination  # Use your custom pagination class
 
-        response_data = {
-            "status": True,
-            "tours": serializer.data
-        }
-
-        return Response(response_data, status=status.HTTP_200_OK)
 
 
 
