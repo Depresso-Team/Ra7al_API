@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SliderPhoto
+from .models import SliderPhoto , Bannar
 
 
 
@@ -10,3 +10,12 @@ class SliderPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SliderPhoto
         fields = '__all__'
+
+
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bannar
+        fields = ('id', 'title', 'bannar_url')
+
