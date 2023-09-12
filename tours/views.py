@@ -2,7 +2,7 @@ from rest_framework.generics import CreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from .models import ToursList
-from .serializers import ToursListSerializer, HighestRateByStateSerializer
+from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer
 from rest_framework.views import APIView
 from django.db.models import Max
 from rest_framework.pagination import PageNumberPagination
@@ -105,3 +105,28 @@ class HighestRateByState(APIView):
             "guides": serializer.data
         }
         return Response(response_data)
+    
+
+# =====================================================================
+
+# Save The Tour
+class SaveTourView(APIView):
+    def post(self, request):
+        serializer = SaveTourSerializer(data=request.data)
+        if serializer.is_valid():
+            tour_id = serializer.validated_data['tour_id']
+            try:
+                tour = ToursList.objects.get(pk=tour_id)
+                tour.saved = True
+                tour.save()
+                return Response({'message': 'Tour saved successfully.'})
+            except ToursList.DoesNotExist:
+                return Response({'message': 'Tour not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# Saved Tours List
+class SavedToursListView(ListAPIView):
+    queryset = ToursList.objects.filter(saved=True)  # Filter saved tours
+    serializer_class = SavedToursSerializer

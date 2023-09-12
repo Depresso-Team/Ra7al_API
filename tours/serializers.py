@@ -6,7 +6,7 @@ from .models import STATES, ToursList
 class ToursListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToursList
-        fields = ('id' , 'name', 'location', 'company_name','state_id', 'rate')
+        fields = ['name','description', 'price', 'location', 'rate', 'saved']
         read_only_fields = ('status',)
 
 
@@ -22,3 +22,16 @@ class HighestRateByStateSerializer(serializers.Serializer):
 
     def get_state_name(self, obj):
         return dict(STATES).get(obj['state_id'])
+
+
+# Save The Tour
+class SaveTourSerializer(serializers.Serializer):
+    tour_id = serializers.IntegerField()
+
+
+
+# Saved Tours
+class SavedToursSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ToursList
+        fields = ['name','description', 'price', 'location', 'rate', 'saved']

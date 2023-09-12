@@ -37,12 +37,15 @@ STATES = [
 
 class ToursList(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(max_length=500)
+    price = models.PositiveIntegerField(default=0)
     state_id = models.CharField(max_length=2, choices=STATES)
     company_name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     status = models.BooleanField(default=True) 
     message = models.TextField(blank=True, null=True)
     rate = models.FloatField(default=0.0)
+    saved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
