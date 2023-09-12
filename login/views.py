@@ -129,6 +129,9 @@ class HighestRatedGuide(APIView):
         # Get all guides that are approved, ordered by rate in descending order
         guides = Guide.objects.filter(is_approved=True).order_by('-rate')
 
+        # Limit the queryset to the top 5 results
+        guides = guides[:5]
+
         # Serialize the guides using the HighestRatedGuideSerializer
         serializer = HighestRatedGuideSerializer(guides, many=True)
         

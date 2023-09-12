@@ -74,6 +74,9 @@ class HighestRateByState(APIView):
         # Get the state with the highest rate for each state
         queryset = ToursList.objects.values('state_id').annotate(highest_rate=Max('rate')).order_by('-highest_rate')
         
+        # Limit the queryset to the top 5 results
+        queryset = queryset[:5]
+
         # Create a dictionary to store the highest rate, location, and name for each state
         highest_rates_by_state = {}
         
@@ -101,6 +104,4 @@ class HighestRateByState(APIView):
             "message": "success",
             "guides": serializer.data
         }
-
         return Response(response_data)
-

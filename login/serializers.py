@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import CustomUser , Guide
 from django.contrib.auth import get_user_model
-from rest_framework.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 
 # User
@@ -31,14 +32,25 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # Guides List
-class GuideSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
+from rest_framework import serializers
 
+class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = ['id', 'username', 'personal_photo', 'background_URL']
 
+    rate = serializers.DecimalField(
+        max_digits=3, 
+        decimal_places=2, 
+        validators=[
+            MinValueValidator(0.0),
+            MaxValueValidator(5.0)
+        ]
+    )
 
+
+
+# from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Best Guides
