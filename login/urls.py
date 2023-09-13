@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import *
 
 
@@ -11,4 +11,6 @@ urlpatterns = [
     path('guides/', GuideList.as_view(), name='guide-list'), # All Guides
     path('highest_rated_guide/', HighestRatedGuide.as_view(), name='highest_rated_guide'), # Best Guides
     path('user/<int:pk>/', UserDetailView.as_view(), name='user_detail'), # Endpoint for user detail view
+    path('save-guide/', SaveGuideView.as_view(), name='save-guide'),
+    path('saved-guides/', SavedGuidesListView.as_view(), name='saved-guide-list'),
 ]

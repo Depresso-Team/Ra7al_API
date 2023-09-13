@@ -32,8 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # Guides List
-from rest_framework import serializers
-
 class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
@@ -50,7 +48,6 @@ class GuideSerializer(serializers.ModelSerializer):
 
 
 
-# from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Best Guides
@@ -61,3 +58,17 @@ class HighestRatedGuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = ['id', 'username', 'personal_photo', 'background_URL', 'rate']
+
+
+
+# Save a Guide by his ID
+class SaveGuideSerializer(serializers.Serializer):
+    guide_id = serializers.IntegerField()
+
+
+
+# Saved Guides
+class SavedGuidesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guide
+        fields = '__all__'

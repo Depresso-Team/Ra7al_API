@@ -119,6 +119,7 @@ class Guide(models.Model):
     is_approved = models.BooleanField(default=False)
     personal_photo = models.URLField(max_length=200)
     background_URL = models.URLField(max_length=200)
+    saved = models.BooleanField(default=False)
 
 
 

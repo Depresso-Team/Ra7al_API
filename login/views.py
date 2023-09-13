@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import status , generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer , HighestRatedGuideSerializer , GuideSerializer
+from .serializers import UserSerializer , HighestRatedGuideSerializer , GuideSerializer, SavedGuidesSerializer, SaveGuideSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +11,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import CustomUser , Guide
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
+
 
 
 
@@ -22,8 +24,15 @@ def register_user(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Create a dynamic error message based on the field errors
+            error_message = 'Error: '
+            for field, errors in serializer.errors.items():
+                error_message += f"{field}: {', '.join(errors)}"
+
+            return Response({'error_message': error_message}, status=status.HTTP_406_NOT_ACCEPTABLE)
     
+
 
 # Register a new user by CBV (generics)    
 class RegisterUserView(generics.CreateAPIView):
@@ -148,4 +157,25 @@ class HighestRatedGuide(APIView):
 
 
 
+# Save a Guide
+class SaveGuideView(APIView):
+    def post(self, request):
+        serializer = SaveGuideSerializer(data=request.data)
+        if serializer.is_valid():
+            guide_id = serializer.validated_data['guide_id']
+            try:
+                guide = Guide.objects.get(pk=guide_id)
+                guide.saved = True
+                guide.save()
+                return Response({'message': 'Guide saved successfully.'})
+            except Guide.DoesNotExist:
+                return Response({'message': 'Guide not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+# Saved Guides List
+class SavedGuidesListView(ListAPIView):
+    queryset = Guide.objects.filter(saved=True)  # Filter saved guides
+    serializer_class = SavedGuidesSerializer
