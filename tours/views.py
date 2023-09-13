@@ -54,7 +54,7 @@ class CustomPageNumberPagination(PageNumberPagination):
 class ToursListView(ListAPIView):
     queryset = ToursList.objects.all()
     serializer_class = ToursListSerializer
-    pagination_class = CustomPageNumberPagination  # Use your custom pagination class
+    pagination_class = CustomPageNumberPagination  
 
 
 

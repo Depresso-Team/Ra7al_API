@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser , Guide
+from .models import CustomUser , Guide , GuidesReviews
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -29,13 +29,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
+class GuidesReviewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuidesReviews
+        fields = ['review']
 
 
 # Guides List
 class GuideSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    review = GuidesReviewsSerializer(many=True, read_only=True, source='guidesreviews_set')
+
     class Meta:
         model = Guide
-        fields = ['id', 'username', 'personal_photo', 'background_URL']
+        fields = ['id', 'username', 'personal_photo', 'background_URL', 'rate', 'review']
 
     rate = serializers.DecimalField(
         max_digits=3, 

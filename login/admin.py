@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Guide
+from .models import CustomUser, Guide , GuidesReviews
 
 
 # Register the CustomUser model with the admin site.
@@ -42,3 +42,6 @@ class GuideAdmin(admin.ModelAdmin):
     user_country_code.short_description = 'Country Code'
     user_photo_url.short_description = 'Photo URL'
     user_languages.short_description = 'Languages'
+
+
+admin.site.register(GuidesReviews)

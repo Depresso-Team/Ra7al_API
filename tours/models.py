@@ -34,6 +34,14 @@ STATES = [
     ('31', '10th of Ramadan'),
 ]
 
+class Reviews (models.Model):
+    tour = models.ForeignKey('ToursList',on_delete=models.CASCADE)
+    review = models.TextField(max_length=500)
+
+    def __str__(self):
+        return str(self.tour)
+    
+
 
 class ToursList(models.Model):
     name = models.CharField(max_length=100)
@@ -49,3 +57,6 @@ class ToursList(models.Model):
 
     def __str__(self):
         return self.name
+
+
+

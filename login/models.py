@@ -112,6 +112,15 @@ def user_created(sender, instance, created, **kwargs):
         instance.save()
     
 
+class GuidesReviews (models.Model):
+    guide = models.ForeignKey('Guide',on_delete=models.CASCADE)
+    review = models.TextField(max_length=500)
+
+    def __str__(self):
+        return str(self.guide)
+
+
+
 class Guide(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     rate = models.FloatField(default=0.0)

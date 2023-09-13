@@ -88,6 +88,8 @@ def user_login(request):
                 serialized_data['reviews'] = guide.reviews
                 serialized_data['personal_photo'] = guide.personal_photo
                 serialized_data['is_approved'] = guide.is_approved
+                serialized_data['background_URL'] = guide.background_URL
+
 
             return Response(serialized_data, status=status.HTTP_200_OK)
 
