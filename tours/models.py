@@ -45,6 +45,8 @@ class Reviews (models.Model):
         return str(self.tour)
     
 
+def default_tour_photo():
+    return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjDnVewOoTokof2aeNRf_3H7k2kfnYIa5Tjg&usqp=CAU'
 
 class ToursList(models.Model):
     name = models.CharField(max_length=100)
@@ -58,7 +60,7 @@ class ToursList(models.Model):
     rate = models.FloatField(default=0.0)
     saved = models.BooleanField(default=False)
     guide = models.ForeignKey(Guide, on_delete=models.SET_NULL, null=True, blank=True)
-    photo = models.ImageField(upload_to='tours')
+    photo = models.ImageField(upload_to='tours',null=True, blank=True ,default=default_tour_photo)
 
 
     def __str__(self):

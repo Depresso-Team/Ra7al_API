@@ -46,7 +46,7 @@ class GuideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Guide
-        fields = ['id', 'username', 'personal_photo', 'background_URL', 'rate', 'review', 'tour_ids']
+        fields = ['id', 'username', 'personal_photo', 'rate', 'review', 'tour_ids']
 
     def get_tour_ids(self, obj):
         # Get the tour IDs associated with the guide
@@ -72,7 +72,7 @@ class HighestRatedGuideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Guide
-        fields = ['id', 'username', 'personal_photo', 'background_URL', 'rate']
+        fields = ['id', 'username', 'personal_photo', 'rate']
 
 
 
