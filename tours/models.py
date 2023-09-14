@@ -1,4 +1,5 @@
 from django.db import models
+from login.models import Guide
 
 STATES = [
     ('1', 'Cairo'),
@@ -54,6 +55,7 @@ class ToursList(models.Model):
     message = models.TextField(blank=True, null=True)
     rate = models.FloatField(default=0.0)
     saved = models.BooleanField(default=False)
+    guide = models.ForeignKey(Guide, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name

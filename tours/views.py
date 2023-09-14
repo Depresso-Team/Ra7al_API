@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from django.db.models import Max
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
+from login.models import Guide
 
 
 
@@ -22,25 +23,30 @@ class ToursListCreateView(CreateAPIView):
         
         # Set the 'status' field to True before saving
         serializer.validated_data['status'] = True
+
+        # Retrieve the guide ID from the request data (assuming it's provided in the request)
+        guide_id = request.data.get('guide')
+
+        if guide_id:
+            try:
+                guide = Guide.objects.get(pk=guide_id)
+                serializer.validated_data['guide'] = guide
+            except Guide.DoesNotExist:
+                # Handle the case where the specified guide does not exist
+                return Response({"status": False, "message": "Guide not found"}, status=status.HTTP_400_BAD_REQUEST)
+
         self.perform_create(serializer)
 
         # Customize the response format
         response_data = {
             "status": True,
             "message": "created successfully",
-            "tours": [
-                {
-                    "id": serializer.instance.id,
-                    "name": serializer.instance.name,
-                    "location": serializer.instance.location,
-                    "company": serializer.instance.company_name,
-                    "state_id": serializer.instance.state_id
-                }
-            ]
+            "tours": [serializer.data]
         }
 
         headers = self.get_success_headers(serializer.data)
         return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 
 # Pagination Class

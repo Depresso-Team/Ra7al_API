@@ -14,7 +14,7 @@ class ToursListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ToursList
-        fields = ['name', 'description', 'price', 'location', 'rate', 'saved', 'reviews']
+        fields = ['name', 'description', 'price', 'location', 'rate', 'saved', 'reviews', 'guide']
         read_only_fields = ('status',)
 
 
