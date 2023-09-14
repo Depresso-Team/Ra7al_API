@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import STATES, ToursList , Reviews
+from .models import  STATES,  ToursList , Reviews
+from login.models import Guide
 
 
 class ReviewsSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class ToursListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ToursList
-        fields = ['name', 'description', 'price', 'location', 'rate', 'saved', 'reviews', 'guide']
+        fields = ['id', 'name', 'description', 'price', 'location', 'rate', 'saved', 'reviews']
         read_only_fields = ('status',)
 
 
@@ -43,3 +44,12 @@ class SavedToursSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToursList
         fields = ['name','description', 'price', 'location', 'rate', 'saved']
+
+
+
+
+
+class ToursListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ToursList
+        fields = '__all__'

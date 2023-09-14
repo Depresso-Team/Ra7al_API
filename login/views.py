@@ -2,13 +2,13 @@ from django.shortcuts import render
 from rest_framework import status , generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer , HighestRatedGuideSerializer , GuideSerializer, SavedGuidesSerializer, SaveGuideSerializer
+from .serializers import *
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
-from .models import CustomUser , Guide
+from .models import CustomUser , Guide , GuidesReviews
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
@@ -181,3 +181,14 @@ class SaveGuideView(APIView):
 class SavedGuidesListView(ListAPIView):
     queryset = Guide.objects.filter(saved=True)  # Filter saved guides
     serializer_class = SavedGuidesSerializer
+
+
+
+
+# Guide Detail
+class GuideDetailView(generics.RetrieveAPIView):
+    queryset = Guide.objects.all()
+    serializer_class = GuideSerializer
+
+
+

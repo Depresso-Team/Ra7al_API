@@ -13,4 +13,5 @@ urlpatterns = [
     path('user/<int:pk>/', UserDetailView.as_view(), name='user_detail'), # Endpoint for user detail view
     path('save-guide/', SaveGuideView.as_view(), name='save-guide'),
     path('saved-guides/', SavedGuidesListView.as_view(), name='saved-guide-list'),
+    path('guides/<int:pk>/', GuideDetailView.as_view(), name='guide-detail'),
 ]

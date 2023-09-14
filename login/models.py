@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.sessions.models import Session
+# from tours.models import ToursList
+
 # Create your models here.
 
 
@@ -92,10 +94,11 @@ class CustomUser(AbstractUser):
     phone = models.PositiveIntegerField(unique=True , null=True)
     address = models.CharField(max_length=150)
     country_code = models.PositiveIntegerField(null=True)
-    photo_url = models.URLField(max_length=255)
-    languages = languages = models.CharField(max_length=50, choices=LANGUAGES)
+    photo_url = models.ImageField(upload_to='p_images', null=True, blank=True, default='https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png')
+    languages = models.CharField(max_length=50, choices=LANGUAGES)
     session_message = models.CharField(max_length=200, blank=True, null=True)
     is_guide = models.BooleanField(default=False)
+    # guided_tours = models.ManyToManyField(ToursList, related_name='guides', blank=True)
 
 
 
@@ -111,6 +114,7 @@ def user_created(sender, instance, created, **kwargs):
         instance.session_message = message
         instance.save()
     
+    
 
 class GuidesReviews (models.Model):
     guide = models.ForeignKey('Guide',on_delete=models.CASCADE)
@@ -123,17 +127,23 @@ class GuidesReviews (models.Model):
 
 class Guide(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    age = models.IntegerField(default=0)
+    license = models.IntegerField(default=0)
+    address = models.CharField(max_length=150)
     rate = models.FloatField(default=0.0)
     reviews = models.TextField(max_length=255)
     is_approved = models.BooleanField(default=False)
-    personal_photo = models.URLField(max_length=200)
-    background_URL = models.URLField(max_length=200)
+    personal_photo = models.ImageField(upload_to='p_images', null=True, blank=True, default='https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png')
+    background_URL = models.ImageField(upload_to='b_images', null=True, blank=True)
     saved = models.BooleanField(default=False)
+    Identity = models.TextField(max_length=500)
 
-
+    
 
     def __str__(self):
         return self.user.username
+    
+
     
 # Signal to create a Guide object when a CustomUser with is_guide=True is created
 @receiver(post_save, sender=CustomUser)

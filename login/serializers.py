@@ -30,10 +30,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
+
 class GuidesReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = GuidesReviews
         fields = ['review']
+
 
 
 # Guides List
@@ -85,3 +87,26 @@ class SavedGuidesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = '__all__'
+
+
+
+
+# Guide Detail
+class GuideSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    languages = serializers.CharField(source='user.languages')
+    tour_ids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Guide
+        fields = ['personal_photo', 'username', 'age', 'address', 'license', 'rate', 'languages', 'Identity', 'tour_ids']
+
+    def get_tour_ids(self, obj):
+        # Assuming you have a reverse relationship 'guided_tours' from Guide to Tour
+        guided_tours = obj.user.guided_tours.all()
+        return [tour.id for tour in guided_tours]
+
+
+
+
+

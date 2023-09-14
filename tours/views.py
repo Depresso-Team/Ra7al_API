@@ -113,7 +113,6 @@ class HighestRateByState(APIView):
         return Response(response_data)
     
 
-# =====================================================================
 
 # Save The Tour
 class SaveTourView(APIView):
@@ -136,3 +135,42 @@ class SaveTourView(APIView):
 class SavedToursListView(ListAPIView):
     queryset = ToursList.objects.filter(saved=True)  # Filter saved tours
     serializer_class = SavedToursSerializer
+
+
+
+
+
+
+class ToursListCreateView(CreateAPIView):
+    queryset = ToursList.objects.all()
+    serializer_class = ToursListSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Set the 'status' field to True before saving
+        serializer.validated_data['status'] = True
+
+        # Retrieve the guide ID from the request data (assuming it's provided in the request)
+        guide_id = request.data.get('guide')
+
+        if guide_id:
+            try:
+                guide = Guide.objects.get(pk=guide_id)  # Replace 'Guide' with the actual model name
+                serializer.validated_data['guide'] = guide
+            except Guide.DoesNotExist:
+                # Handle the case where the specified guide does not exist
+                return Response({"status": False, "message": "Guide not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_create(serializer)
+
+        # Customize the response format
+        response_data = {
+            "status": True,
+            "message": "created successfully",
+            "tour": serializer.data
+        }
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
