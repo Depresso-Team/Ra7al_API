@@ -83,27 +83,28 @@ class HighestRateByState(APIView):
         # Limit the queryset to the top 5 results
         queryset = queryset[:5]
 
-        # Create a dictionary to store the highest rate, location, and name for each state
-        highest_rates_by_state = {}
-        
+        # Create a list to store the highest rate, location, and name for each state
+        highest_rates_by_state = []
+
         for item in queryset:
             state_id = item['state_id']
             highest_rate = item['highest_rate']
             
-            # Get the location, name, and company name with the highest rate for the current state
-            highest_data = ToursList.objects.filter(state_id=state_id, rate=highest_rate).values('location', 'name', 'company_name').first()
+            # Get the location, name, company name, and id with the highest rate for the current state
+            highest_data = ToursList.objects.filter(state_id=state_id, rate=highest_rate).values('id', 'location', 'name', 'company_name').first()
             
-            # Add the state_id, highest_rate, highest_location, name, and company_name to the dictionary
-            highest_rates_by_state[state_id] = {
+            # Add the state_id, highest_rate, highest_location, name, company_name, and id to the list
+            highest_rates_by_state.append({
+                'id': highest_data['id'] if highest_data else None,
                 'state_id': state_id,
                 'highest_rate': highest_rate,
                 'highest_location': highest_data['location'] if highest_data else None,
                 'name': highest_data['name'] if highest_data else None,
                 'company_name': highest_data['company_name'] if highest_data else None
-            }
+            })
         
         # Serialize the data using the HighestRateByStateSerializer
-        serializer = HighestRateByStateSerializer(highest_rates_by_state.values(), many=True)
+        serializer = HighestRateByStateSerializer(highest_rates_by_state, many=True)
 
         response_data = {
             "status": True,
@@ -174,3 +175,30 @@ class ToursListCreateView(CreateAPIView):
 
         headers = self.get_success_headers(serializer.data)
         return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from .models import Reviews
+from .serializers import CreateReviewSerializer, ReviewsSerializer
+
+class CreateReviewView(generics.CreateAPIView):
+    serializer_class = CreateReviewSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        
+        if serializer.is_valid():
+            tour_id = serializer.validated_data['tour_id']
+            review_text = serializer.validated_data['review']
+
+            try:
+                tour = ToursList.objects.get(pk=tour_id)
+                review = Reviews(tour=tour, review=review_text)
+                review.save()
+                return Response({'message': 'Review created successfully'}, status=status.HTTP_201_CREATED)
+            except ToursList.DoesNotExist:
+                return Response({'error': 'Tour not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

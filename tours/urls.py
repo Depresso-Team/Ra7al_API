@@ -10,4 +10,5 @@ urlpatterns = [
     path('save-tour/', SaveTourView.as_view(), name='save-tour'),
     path('saved-tours/', SavedToursListView.as_view(), name='saved-tour-list'),
     path('create-tour/', ToursListCreateView.as_view(), name='create-tour'),
+    path('reviews/create/', CreateReviewView.as_view(), name='create_review'),
 ]

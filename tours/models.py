@@ -39,6 +39,7 @@ STATES = [
 class Reviews (models.Model):
     tour = models.ForeignKey('ToursList',on_delete=models.CASCADE)
     review = models.TextField(max_length=500)
+    date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return str(self.tour)
@@ -57,6 +58,7 @@ class ToursList(models.Model):
     rate = models.FloatField(default=0.0)
     saved = models.BooleanField(default=False)
     guide = models.ForeignKey(Guide, on_delete=models.SET_NULL, null=True, blank=True)
+    photo = models.ImageField(upload_to='tours')
 
 
     def __str__(self):

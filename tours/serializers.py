@@ -22,9 +22,10 @@ class ToursListSerializer(serializers.ModelSerializer):
 
 # Best Tours
 class HighestRateByStateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     name = serializers.CharField(max_length=100)
     company_name = serializers.CharField(max_length=100)
-    state_name = serializers.SerializerMethodField()  
+    state_name = serializers.SerializerMethodField()
     highest_location = serializers.CharField(max_length=100, allow_null=True)
     highest_rate = serializers.FloatField()
     state_id = serializers.CharField(max_length=2)
@@ -53,3 +54,15 @@ class ToursListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToursList
         fields = '__all__'
+
+
+
+
+class ReviewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reviews
+        fields = '__all__'
+
+class CreateReviewSerializer(serializers.Serializer):
+    tour_id = serializers.IntegerField()
+    review = serializers.CharField(max_length=500)
