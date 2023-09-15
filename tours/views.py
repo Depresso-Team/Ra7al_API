@@ -1,13 +1,14 @@
 from rest_framework.generics import CreateAPIView , RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework import status
 from rest_framework.response import Response
-from .models import ToursList
-from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer
+from .models import ToursList, Reviews
+from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer, CreateReviewSerializer
 from rest_framework.views import APIView
 from django.db.models import Max
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 from login.models import Guide
+from rest_framework import generics, status
 
 
 
@@ -74,12 +75,8 @@ class ToursListDetailView(RetrieveUpdateDestroyAPIView):
 
 
 
-from django.db.models import Max
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import ToursList  # Import your ToursList model
-from .serializers import HighestRateByStateSerializer
 
+# Best Tours
 class HighestRateByState(APIView):
     def get(self, request):
         # Get the state with the highest rate for each state
@@ -115,7 +112,7 @@ class HighestRateByState(APIView):
         response_data = {
             "status": True,
             "message": "success",
-            "guides": serializer.data
+            "tours": serializer.data
         }
         return Response(response_data)
 
@@ -184,10 +181,8 @@ class ToursListCreateView(CreateAPIView):
 
 
 
-from rest_framework import generics, status
-from rest_framework.response import Response
-from .models import Reviews
-from .serializers import CreateReviewSerializer, ReviewsSerializer
+
+
 
 class CreateReviewView(generics.CreateAPIView):
     serializer_class = CreateReviewSerializer

@@ -22,6 +22,199 @@ securityDefinitions:
 security:
 - Basic: []
 paths:
+  /best_tours/:
+    get:
+      operationId: best_tours_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - best_tours
+    parameters: []
+  /create-tour/:
+    post:
+      operationId: create-tour_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ToursList'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ToursList'
+      tags:
+      - create-tour
+    parameters: []
+  /home/banner/:
+    get:
+      operationId: home_banner_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Banner'
+      tags:
+      - home
+    post:
+      operationId: home_banner_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Banner'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Banner'
+      tags:
+      - home
+    parameters: []
+  /home/banner/all/:
+    get:
+      operationId: home_banner_all_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Banner'
+      tags:
+      - home
+    parameters: []
+  /home/banner/{id}/:
+    get:
+      operationId: home_banner_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Banner'
+      tags:
+      - home
+    put:
+      operationId: home_banner_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Banner'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Banner'
+      tags:
+      - home
+    patch:
+      operationId: home_banner_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Banner'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Banner'
+      tags:
+      - home
+    delete:
+      operationId: home_banner_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - home
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this bannar.
+      required: true
+      type: integer
+  /home/slider/:
+    get:
+      operationId: home_slider_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SliderPhoto'
+      tags:
+      - home
+    parameters: []
+  /reviews/create/:
+    post:
+      operationId: reviews_create_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateReview'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateReview'
+      tags:
+      - reviews
+    parameters: []
+  /save-tour/:
+    post:
+      operationId: save-tour_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - save-tour
+    parameters: []
+  /saved-tours/:
+    get:
+      operationId: saved-tours_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SavedTours'
+      tags:
+      - saved-tours
+    parameters: []
   /tours/create/:
     post:
       operationId: tours_create_create
@@ -44,10 +237,40 @@ paths:
     get:
       operationId: tours_list_list
       description: ''
-      parameters: []
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      - name: page_size
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
       responses:
         '200':
           description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/ToursList'
       tags:
       - tours
     parameters: []
@@ -129,6 +352,39 @@ paths:
       responses:
         '200':
           description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GuideList'
+      tags:
+      - users
+    parameters: []
+  /users/guides/{id}/:
+    get:
+      operationId: users_guides_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Guide'
+      tags:
+      - users
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this guide.
+      required: true
+      type: integer
+  /users/highest_rated_guide/:
+    get:
+      operationId: users_highest_rated_guide_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
       tags:
       - users
     parameters: []
@@ -183,27 +439,78 @@ paths:
       tags:
       - users
     parameters: []
-  /users/users/{user_id}/:
+  /users/save-guide/:
+    post:
+      operationId: users_save-guide_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - users
+    parameters: []
+  /users/saved-guides/:
     get:
-      operationId: users_users_read
+      operationId: users_saved-guides_list
       description: ''
       parameters: []
       responses:
         '200':
           description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SavedGuides'
+      tags:
+      - users
+    parameters: []
+  /users/user/{id}/:
+    get:
+      operationId: users_user_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
       tags:
       - users
     put:
-      operationId: users_users_update
+      operationId: users_user_update
       description: ''
-      parameters: []
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
       responses:
         '200':
           description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+      - users
+    patch:
+      operationId: users_user_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
       tags:
       - users
     delete:
-      operationId: users_users_delete
+      operationId: users_user_delete
       description: ''
       parameters: []
       responses:
@@ -212,17 +519,20 @@ paths:
       tags:
       - users
     parameters:
-    - name: user_id
+    - name: id
       in: path
+      description: A unique integer value identifying this user.
       required: true
-      type: string
+      type: integer
 definitions:
   ToursList:
     required:
     - name
-    - location
-    - company_name
+    - description
     - state_id
+    - company_name
+    - duration
+    - location
     type: object
     properties:
       id:
@@ -234,16 +544,14 @@ definitions:
         type: string
         maxLength: 100
         minLength: 1
-      location:
-        title: Location
+      description:
+        title: Description
         type: string
-        maxLength: 100
+        maxLength: 500
         minLength: 1
-      company_name:
-        title: Company name
-        type: string
-        maxLength: 100
-        minLength: 1
+      price:
+        title: Price
+        type: integer
       state_id:
         title: State id
         type: string
@@ -279,13 +587,220 @@ definitions:
         - '29'
         - '30'
         - '31'
+      company_name:
+        title: Company name
+        type: string
+        maxLength: 100
+        minLength: 1
+      duration:
+        title: Duration
+        type: integer
+      location:
+        title: Location
+        type: string
+        maxLength: 100
+        minLength: 1
+      status:
+        title: Status
+        type: boolean
+      message:
+        title: Message
+        type: string
+        x-nullable: true
+      rate:
+        title: Rate
+        type: number
+      saved:
+        title: Saved
+        type: boolean
+      photo:
+        title: Photo
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      guide:
+        title: Guide
+        type: integer
+        x-nullable: true
+  Banner:
+    required:
+    - title
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 50
+        minLength: 1
+      bannar_url:
+        title: Bannar url
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+  SliderPhoto:
+    required:
+    - title
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 200
+        minLength: 1
+      photo_url:
+        title: Photo url
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+  CreateReview:
+    required:
+    - tour_id
+    - review
+    type: object
+    properties:
+      tour_id:
+        title: Tour id
+        type: integer
+      review:
+        title: Review
+        type: string
+        maxLength: 500
+        minLength: 1
+  SavedTours:
+    required:
+    - name
+    - description
+    - location
+    type: object
+    properties:
+      name:
+        title: Name
+        type: string
+        maxLength: 100
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 500
+        minLength: 1
+      price:
+        title: Price
+        type: integer
+      location:
+        title: Location
+        type: string
+        maxLength: 100
+        minLength: 1
+      rate:
+        title: Rate
+        type: number
+      saved:
+        title: Saved
+        type: boolean
+  GuideList:
+    required:
+    - username
+    - address
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        minLength: 1
+      personal_photo:
+        title: Personal photo
+        type: string
+        readOnly: true
+        format: uri
+      rate:
+        title: Rate
+        type: number
+      license:
+        title: License
+        type: integer
+      saved:
+        title: Saved
+        type: boolean
+  GuidesReviews:
+    required:
+    - review
+    type: object
+    properties:
+      review:
+        title: Review
+        type: string
+        maxLength: 500
+        minLength: 1
+  Guide:
+    required:
+    - username
+    - address
+    - rate
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      personal_photo:
+        title: Personal photo
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      age:
+        title: Age
+        type: integer
+      license:
+        title: License
+        type: integer
+      address:
+        title: Address
+        type: string
+        maxLength: 150
+        minLength: 1
+      rate:
+        title: Rate
+        type: string
+        format: decimal
+      review:
+        type: array
+        items:
+          $ref: '#/definitions/GuidesReviews'
+        readOnly: true
+      tour_list:
+        title: Tour list
+        type: string
+        readOnly: true
   User:
     required:
     - username
     - email
     - password
     - address
-    - photo_url
     - languages
     type: object
     properties:
@@ -310,13 +825,10 @@ definitions:
       password:
         title: Password
         type: string
-        maxLength: 128
         minLength: 1
       phone:
         title: Phone
         type: integer
-        maximum: 2147483647
-        minimum: 0
         x-nullable: true
       address:
         title: Address
@@ -326,15 +838,13 @@ definitions:
       country_code:
         title: Country code
         type: integer
-        maximum: 2147483647
-        minimum: 0
         x-nullable: true
       photo_url:
         title: Photo url
         type: string
+        readOnly: true
+        x-nullable: true
         format: uri
-        maxLength: 255
-        minLength: 1
       languages:
         title: Languages
         type: string
@@ -417,3 +927,54 @@ definitions:
         type: string
         maxLength: 200
         x-nullable: true
+  SavedGuides:
+    required:
+    - address
+    - reviews
+    - Identity
+    - user
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      age:
+        title: Age
+        type: integer
+      license:
+        title: License
+        type: integer
+      address:
+        title: Address
+        type: string
+        maxLength: 150
+        minLength: 1
+      rate:
+        title: Rate
+        type: number
+      reviews:
+        title: Reviews
+        type: string
+        maxLength: 255
+        minLength: 1
+      is_approved:
+        title: Is approved
+        type: boolean
+      personal_photo:
+        title: Personal photo
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      saved:
+        title: Saved
+        type: boolean
+      Identity:
+        title: Identity
+        type: string
+        maxLength: 500
+        minLength: 1
+      user:
+        title: User
+        type: integer

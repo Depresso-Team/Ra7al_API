@@ -136,9 +136,6 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-from rest_framework.generics import ListAPIView
-from .models import Guide
-from .serializers import GuideListSerializer
 
 class GuideListView(ListAPIView):
     queryset = Guide.objects.all()  # You can customize the queryset as needed

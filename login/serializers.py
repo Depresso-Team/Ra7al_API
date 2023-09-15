@@ -38,28 +38,45 @@ class GuidesReviewsSerializer(serializers.ModelSerializer):
 
 
 
-# Guides List
+# Guide
 class GuideSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     review = GuidesReviewsSerializer(many=True, read_only=True, source='guidesreviews_set')
-    tour_ids = serializers.SerializerMethodField()
+    tour_list = serializers.SerializerMethodField()  # New field for tour details
 
     class Meta:
         model = Guide
-        fields = ['id', 'username', 'personal_photo', 'rate', 'review', 'tour_ids']
+        fields = ['id', 'username', 'personal_photo', 'age', 'license', 'address', 'rate', 'review', 'tour_list']
 
-    def get_tour_ids(self, obj):
-        # Get the tour IDs associated with the guide
-        return list(obj.tourslist_set.values_list('id', flat=True))
+    def get_tour_names(self, obj):
+        # Get the tour names associated with the guide
+        return list(obj.tourslist_set.values_list('name', flat=True))  # Assuming 'name' is the field in your Tour model
+
+    def get_tour_list(self, obj):
+        # Get the list of tour details (id, name, price, state_id, location, duration, photo) associated with the guide
+        tour_queryset = obj.tourslist_set.all()
+        tour_data = [
+            {
+                'id': tour.id,
+                'name': tour.name,
+                'price': tour.price,
+                'state_id': tour.state_id,  
+                'location': tour.location,  
+                'duration': tour.duration,   
+            }
+            for tour in tour_queryset
+        ]
+        return tour_data
 
     rate = serializers.DecimalField(
-        max_digits=3, 
-        decimal_places=2, 
+        max_digits=3,
+        decimal_places=2,
         validators=[
             MinValueValidator(0.0),
             MaxValueValidator(5.0)
         ]
     )
+
 
 
 
@@ -114,8 +131,6 @@ class SavedGuidesSerializer(serializers.ModelSerializer):
 
 
 
-from rest_framework import serializers
-from .models import Guide, CustomUser
 
 class GuideListSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

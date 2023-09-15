@@ -29,7 +29,7 @@ class HighestRateByStateSerializer(serializers.Serializer):
     highest_location = serializers.CharField(max_length=100, allow_null=True)
     highest_rate = serializers.FloatField()
     state_id = serializers.CharField(max_length=2)
-    duration = serializers.IntegerField()  # Add this line for the duration field
+    duration = serializers.IntegerField()  
 
     def get_state_name(self, obj):
         return dict(STATES).get(obj['state_id'])
