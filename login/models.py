@@ -92,15 +92,14 @@ LANGUAGES = [
 
 
 def default_photo_url():
-    img = 'https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png'
-    return img
+    return 'tours/default_photo.jpg'
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.PositiveIntegerField(unique=True , null=True)
     address = models.CharField(max_length=150)
     country_code = models.PositiveIntegerField(null=True)
-    photo_url = models.ImageField(upload_to='p_images', null=True, blank=True, default=default_photo_url)
+    photo_url = models.ImageField(upload_to='users/', null=True, blank=True, default=default_photo_url)
     languages = models.CharField(max_length=50, choices=LANGUAGES)
     session_message = models.CharField(max_length=200, blank=True, null=True)
     is_guide = models.BooleanField(default=False)
@@ -131,7 +130,7 @@ class GuidesReviews (models.Model):
 
 
 def default_personal_photo():
-    return 'https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png'
+    return 'tours/default_photo.jpg'
 
 
 class Guide(models.Model):
@@ -142,7 +141,7 @@ class Guide(models.Model):
     rate = models.FloatField(default=0.0)
     reviews = models.TextField(max_length=255)
     is_approved = models.BooleanField(default=False)
-    personal_photo = models.ImageField(upload_to='p_images', null=True, blank=True, default=default_personal_photo)
+    personal_photo = models.ImageField(upload_to='guides/', null=True, blank=True, default=default_personal_photo)
     saved = models.BooleanField(default=False)
     Identity = models.TextField(max_length=500)
 
