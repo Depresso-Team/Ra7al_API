@@ -54,6 +54,7 @@ class ToursList(models.Model):
     price = models.PositiveIntegerField(default=0)
     state_id = models.CharField(max_length=2, choices=STATES)
     company_name = models.CharField(max_length=100)
+    duration = models.IntegerField()
     location = models.CharField(max_length=100)
     status = models.BooleanField(default=True) 
     message = models.TextField(blank=True, null=True)

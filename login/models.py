@@ -87,8 +87,13 @@ LANGUAGES = [
     ("yi", "Yiddish"),
 ]
 
+
+
+
+
 def default_photo_url():
-    return 'https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png'
+    img = 'https://www.pngarts.com/files/10/Default-Profile-Picture-Download-PNG-Image.png'
+    return img
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)

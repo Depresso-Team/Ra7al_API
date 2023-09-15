@@ -66,14 +66,20 @@ class GuideSerializer(serializers.ModelSerializer):
 
 
 # Best Guides
+from rest_framework import serializers
+
+class AddressField(serializers.CharField):
+    def to_representation(self, obj):
+        return obj.address
+
 class HighestRatedGuideSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
+    address = AddressField(source='user', read_only=True)  # Add this field for address
 
     class Meta:
         model = Guide
-        fields = ['id', 'username', 'personal_photo', 'rate']
-
+        fields = ['id', 'username', 'personal_photo', 'rate', 'address']  # Include 'address' field
 
 
 # Save a Guide by his ID
@@ -92,20 +98,34 @@ class SavedGuidesSerializer(serializers.ModelSerializer):
 
 
 # Guide Detail
-class GuideSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
-    languages = serializers.CharField(source='user.languages')
-    tour_ids = serializers.SerializerMethodField()
+# class GuideSerializer(serializers.ModelSerializer):
+#     username = serializers.ReadOnlyField(source='user.username')
+#     languages = serializers.CharField(source='user.languages')
+#     tour_ids = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Guide
+#         fields = ['personal_photo', 'username', 'age', 'address', 'license', 'rate', 'languages', 'Identity', 'tour_ids']
+
+#     def get_tour_ids(self, obj):
+#         # Assuming you have a reverse relationship 'guided_tours' from Guide to Tour
+#         guided_tours = obj.user.guided_tours.all()
+#         return [tour.id for tour in guided_tours]
+
+
+
+from rest_framework import serializers
+from .models import Guide, CustomUser
+
+class GuideListSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    address = serializers.CharField(source='user.address')
+    # Remove the source keyword argument for personal_photo
+    personal_photo = serializers.ImageField()  # Remove 'source' here
 
     class Meta:
         model = Guide
-        fields = ['personal_photo', 'username', 'age', 'address', 'license', 'rate', 'languages', 'Identity', 'tour_ids']
-
-    def get_tour_ids(self, obj):
-        # Assuming you have a reverse relationship 'guided_tours' from Guide to Tour
-        guided_tours = obj.user.guided_tours.all()
-        return [tour.id for tour in guided_tours]
-
+        fields = ['id', 'username', 'address', 'personal_photo', 'rate','license','saved']
 
 
 

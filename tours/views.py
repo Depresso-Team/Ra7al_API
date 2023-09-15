@@ -74,7 +74,12 @@ class ToursListDetailView(RetrieveUpdateDestroyAPIView):
 
 
 
-# Best Tours , filtered by rate 
+from django.db.models import Max
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import ToursList  # Import your ToursList model
+from .serializers import HighestRateByStateSerializer
+
 class HighestRateByState(APIView):
     def get(self, request):
         # Get the state with the highest rate for each state
@@ -83,7 +88,7 @@ class HighestRateByState(APIView):
         # Limit the queryset to the top 5 results
         queryset = queryset[:5]
 
-        # Create a list to store the highest rate, location, and name for each state
+        # Create a list to store the highest rate, location, name, company name, and duration for each state
         highest_rates_by_state = []
 
         for item in queryset:
@@ -91,7 +96,7 @@ class HighestRateByState(APIView):
             highest_rate = item['highest_rate']
             
             # Get the location, name, company name, and id with the highest rate for the current state
-            highest_data = ToursList.objects.filter(state_id=state_id, rate=highest_rate).values('id', 'location', 'name', 'company_name').first()
+            highest_data = ToursList.objects.filter(state_id=state_id, rate=highest_rate).values('id', 'location', 'name', 'company_name', 'duration').first()
             
             # Add the state_id, highest_rate, highest_location, name, company_name, and id to the list
             highest_rates_by_state.append({
@@ -100,7 +105,8 @@ class HighestRateByState(APIView):
                 'highest_rate': highest_rate,
                 'highest_location': highest_data['location'] if highest_data else None,
                 'name': highest_data['name'] if highest_data else None,
-                'company_name': highest_data['company_name'] if highest_data else None
+                'company_name': highest_data['company_name'] if highest_data else None,
+                'duration': highest_data['duration'] if highest_data else None  # Include duration here
             })
         
         # Serialize the data using the HighestRateByStateSerializer
@@ -112,7 +118,7 @@ class HighestRateByState(APIView):
             "guides": serializer.data
         }
         return Response(response_data)
-    
+
 
 
 # Save The Tour

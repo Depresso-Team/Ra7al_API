@@ -15,7 +15,7 @@ class ToursListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ToursList
-        fields = ['id', 'name', 'description', 'price', 'location', 'rate', 'saved', 'reviews']
+        fields = ['id', 'name', 'description', 'price', 'location', 'rate', 'saved', 'reviews','duration','location']
         read_only_fields = ('status',)
 
 
@@ -29,6 +29,7 @@ class HighestRateByStateSerializer(serializers.Serializer):
     highest_location = serializers.CharField(max_length=100, allow_null=True)
     highest_rate = serializers.FloatField()
     state_id = serializers.CharField(max_length=2)
+    duration = serializers.IntegerField()  # Add this line for the duration field
 
     def get_state_name(self, obj):
         return dict(STATES).get(obj['state_id'])

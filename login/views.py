@@ -119,18 +119,32 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # Guides List
-class GuideList(APIView):
-    def get(self, request, format=None):
-        guides = Guide.objects.all()
-        serializer = GuideSerializer(guides, many=True)
+# class GuideList(APIView):
+#     def get(self, request, format=None):
+#         guides = Guide.objects.all()
+#         serializer = GuideSerializer(guides, many=True)
 
-        response_data = {
-            "status": True,
-            "message": "success",
-            "guides": serializer.data
-        }
+#         response_data = {
+#             "status": True,
+#             "message": "success",
+#             "guides": serializer.data
+#         }
 
-        return Response(response_data)
+#         return Response(response_data)
+
+
+
+
+
+from rest_framework.generics import ListAPIView
+from .models import Guide
+from .serializers import GuideListSerializer
+
+class GuideListView(ListAPIView):
+    queryset = Guide.objects.all()  # You can customize the queryset as needed
+    serializer_class = GuideListSerializer
+
+
 
 
 
