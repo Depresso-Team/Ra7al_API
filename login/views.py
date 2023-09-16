@@ -62,20 +62,22 @@ def user_logout(request):
 @api_view(['POST'])
 def user_login(request):
     if request.method == 'POST':
-        username = request.data.get('username')
+        username_or_email = request.data.get('username_or_email')
         password = request.data.get('password')
 
         user = None
-        if '@' in username:
-            try:
-                user = CustomUser.objects.get(email=username)
-            except ObjectDoesNotExist:
-                pass
 
+        # Attempt to find the user by email
+        try:
+            user = CustomUser.objects.get(email=username_or_email)
+        except ObjectDoesNotExist:
+            pass
+
+        # If not found by email, attempt to find the user by username
         if not user:
-            user = authenticate(username=username, password=password)
+            user = CustomUser.objects.filter(username=username_or_email).first()
 
-        if user:
+        if user and user.check_password(password):
             token, _ = Token.objects.get_or_create(user=user)
             serializer = UserSerializer(user)  # Pass the user instance to the serializer
             serialized_data = serializer.data
@@ -90,10 +92,10 @@ def user_login(request):
                 serialized_data['is_approved'] = guide.is_approved
                 serialized_data['background_URL'] = guide.background_URL
 
-
             return Response(serialized_data, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
     
 
