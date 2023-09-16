@@ -95,6 +95,7 @@ def default_photo_url():
     return 'tours/default_photo.jpg'
 
 class CustomUser(AbstractUser):
+    full_name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     phone = models.PositiveIntegerField(unique=True , null=True)
     address = models.CharField(max_length=150)
