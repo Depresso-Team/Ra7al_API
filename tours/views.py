@@ -2,7 +2,7 @@ from rest_framework.generics import CreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from .models import ToursList, Reviews
-from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer, CreateReviewSerializer
+from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer, CreateReviewSerializer,HighestRateByStateSerializer
 from rest_framework.views import APIView
 from django.db.models import Max
 from rest_framework.pagination import PageNumberPagination
@@ -203,3 +203,13 @@ class CreateReviewView(generics.CreateAPIView):
                 return Response({'error': 'Tour not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+# views.py
+
+
+class BestToursListView(generics.ListAPIView):
+    queryset = ToursList.objects.all()
+    serializer_class = HighestRateByStateSerializer
