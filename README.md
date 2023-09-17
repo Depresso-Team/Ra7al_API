@@ -33,7 +33,7 @@ The RAHAL REST API project aims to simplify and enhance the travel experience fo
 
 ## API documentation link
 
-https://rahal-app-efe3e7eff0b7.herokuapp.com/redoc/
+https://rahal-app-efe3e7eff0b7.herokuapp.com
 
 
 ## Our Technologies
