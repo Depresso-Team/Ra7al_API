@@ -3,6 +3,8 @@ from .models import CustomUser , Guide , GuidesReviews
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from tours.models import ToursList
+from django.urls import reverse
+
 
 
 
@@ -32,9 +34,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class GuidesReviewsSerializer(serializers.ModelSerializer):
+    reviewer_username = serializers.CharField(source='reviewer.username', read_only=True)  # Add reviewer_username field for the user who wrote the review
+
     class Meta:
         model = GuidesReviews
-        fields = ['review']
+        fields = ['id', 'review', 'reviewer_username', 'date']
 
 
 
@@ -48,29 +52,26 @@ class GuideSerializer(serializers.ModelSerializer):
         model = Guide
         fields = ['id', 'username', 'personal_photo', 'age', 'license', 'address', 'rate', 'review', 'tour_list']
 
-    def get_tour_names(self, obj):
-        # Get the tour names associated with the guide
-        return list(obj.tourslist_set.values_list('name', flat=True))  # Assuming 'name' is the field in your Tour model
-
     def get_tour_list(self, obj):
-        # Get the list of tour details (id, name, price, state_id, location, duration, photo) associated with the guide
+        # Get the list of tour details (id, name, price, state_id, location, duration, photo, rate) associated with the guide
+        request = self.context.get('request')
         tour_queryset = obj.tourslist_set.all()
         tour_data = [
             {
                 'id': tour.id,
                 'name': tour.name,
                 'price': tour.price,
-                'state_id': tour.state_id,  
-                'location': tour.location,  
-                'duration': tour.duration,   
+                'state_id': tour.state_id,
+                'location': tour.location,
+                'duration': tour.duration,
+                'photo': request.build_absolute_uri(tour.photo.url),  # Get the full URL
+                'rate': tour.rate,  # Include the rate from ToursList model as a float
             }
             for tour in tour_queryset
         ]
         return tour_data
 
-    rate = serializers.DecimalField(
-        max_digits=3,
-        decimal_places=2,
+    rate = serializers.FloatField(
         validators=[
             MinValueValidator(0.0),
             MaxValueValidator(5.0)
@@ -82,9 +83,8 @@ class GuideSerializer(serializers.ModelSerializer):
 
 
 
-# Best Guides
-from rest_framework import serializers
 
+# Best Guides
 class AddressField(serializers.CharField):
     def to_representation(self, obj):
         return obj.address
@@ -97,6 +97,7 @@ class HighestRatedGuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = ['id', 'username', 'personal_photo', 'rate', 'address']  # Include 'address' field
+
 
 
 # Save a Guide by his ID

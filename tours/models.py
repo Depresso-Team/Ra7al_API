@@ -1,5 +1,5 @@
 from django.db import models
-from login.models import Guide
+from login.models import Guide , CustomUser
 
 
 STATES = [
@@ -40,6 +40,7 @@ class Reviews (models.Model):
     tour = models.ForeignKey('ToursList',on_delete=models.CASCADE)
     review = models.TextField(max_length=500)
     date = models.DateField(auto_now_add=True)
+    reviewer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.tour)

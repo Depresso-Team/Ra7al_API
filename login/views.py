@@ -126,7 +126,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-
+# Guides List
 class GuideListView(ListAPIView):
     queryset = Guide.objects.all()  # You can customize the queryset as needed
     serializer_class = GuideListSerializer
@@ -190,6 +190,3 @@ class SavedGuidesListView(ListAPIView):
 class GuideDetailView(generics.RetrieveAPIView):
     queryset = Guide.objects.all()
     serializer_class = GuideSerializer
-
-
-

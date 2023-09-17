@@ -125,6 +125,8 @@ def user_created(sender, instance, created, **kwargs):
 class GuidesReviews (models.Model):
     guide = models.ForeignKey('Guide',on_delete=models.CASCADE)
     review = models.TextField(max_length=500)
+    date = models.DateField(auto_now_add=True)
+    reviewer = models.ForeignKey(CustomUser, on_delete=models.CASCADE) 
 
     def __str__(self):
         return str(self.guide)

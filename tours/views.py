@@ -2,7 +2,7 @@ from rest_framework.generics import CreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from .models import ToursList, Reviews
-from .serializers import SaveTourSerializer, SavedToursSerializer, ToursListSerializer, HighestRateByStateSerializer, CreateReviewSerializer,HighestRateByStateSerializer
+from .serializers import SaveTourSerializer, SavedToursSerializer, TourDetailSerializer, ToursListSerializer, HighestRateByStateSerializer, CreateReviewSerializer,HighestRateByStateSerializer
 from rest_framework.views import APIView
 from django.db.models import Max
 from rest_framework.pagination import PageNumberPagination
@@ -70,7 +70,7 @@ class ToursListView(ListAPIView):
 # Tour Detail with put and delete
 class ToursListDetailView(RetrieveUpdateDestroyAPIView):
     queryset = ToursList.objects.all()
-    serializer_class = ToursListSerializer
+    serializer_class = TourDetailSerializer
 
 
 
@@ -205,9 +205,6 @@ class CreateReviewView(generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-# views.py
 
 
 class BestToursListView(generics.ListAPIView):

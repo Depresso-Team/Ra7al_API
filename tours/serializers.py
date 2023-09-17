@@ -52,36 +52,16 @@ class ToursListSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# serializers.py
-
-from rest_framework import serializers
-
 class HighestRateByStateSerializer(serializers.ModelSerializer):
     state_name = serializers.SerializerMethodField()
 
     class Meta:
         model = ToursList
         fields = '__all__'  # Include all fields from the ToursList model
-        # Add any additional fields you want to include here
+       
 
     def get_state_name(self, obj):
         return dict(STATES).get(obj.state_id)
-
-
-
-
 
 
 
@@ -101,7 +81,7 @@ class SavedToursSerializer(serializers.ModelSerializer):
 
 
 
-
+# Tours List
 class ToursListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToursList
@@ -109,12 +89,28 @@ class ToursListSerializer(serializers.ModelSerializer):
 
 
 
+# Tours Reviews
+class ReviewSerializer(serializers.ModelSerializer):
+    reviewer_username = serializers.CharField(source='reviewer.username', read_only=True)
 
-class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews
-        fields = '__all__'
+        fields = ['id', 'reviewer_username', 'review', 'date']
 
+
+# Create Review
 class CreateReviewSerializer(serializers.Serializer):
     tour_id = serializers.IntegerField()
     review = serializers.CharField(max_length=500)
+
+
+
+from rest_framework import serializers
+
+class TourDetailSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True, read_only=True, source='reviews_set')
+
+    class Meta:
+        model = ToursList
+        fields = ['id', 'name', 'description', 'price', 'state_id', 'company_name', 'duration', 'location', 'status', 'message', 'rate', 'saved', 'guide', 'photo', 'reviews']
+
